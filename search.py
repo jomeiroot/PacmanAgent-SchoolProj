@@ -87,6 +87,29 @@ def depthFirstSearch(problem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     "*** YOUR CODE HERE ***"
+    start_node = problem.getStartState()
+    unexplored = util.Stack()
+    unexplored.push((start_node, [], 0))#(location, path from start, cost_from_start)
+    visited = set()
+    while not unexplored.isEmpty():
+        node, path_list, cost_from_start = unexplored.pop()
+
+        if problem.isGoalState(node):
+            return path_list
+
+        if node in visited:
+            continue
+        visited.add(node)
+        #expand neighbors
+        successors = problem.getSuccessors(node)
+        for successor in successors:
+            successor_node = successor[0]
+            successor_path = successor[1]
+            successor_cost = successor[2]
+            if successor_node not in visited:
+                #path list should show how to get to this node from the start
+                unexplored.push((successor_node, path_list + [successor_path], successor_cost+cost_from_start))
+            #else continue
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
