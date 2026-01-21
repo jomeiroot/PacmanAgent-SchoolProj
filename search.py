@@ -72,6 +72,7 @@ def tinyMazeSearch(problem):
     w = Directions.WEST
     return  [s, s, w, s, w, w, s, w]
 
+
 def depthFirstSearch(problem):
     """
     Search the deepest nodes in the search tree first.
@@ -87,6 +88,8 @@ def depthFirstSearch(problem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     "*** YOUR CODE HERE ***"
+
+
     start_node = problem.getStartState()
     unexplored = util.Stack()
     unexplored.push((start_node, [], 0))#(location, path from start, cost_from_start)
@@ -100,8 +103,8 @@ def depthFirstSearch(problem):
         if node in visited:
             continue
         visited.add(node)
-        #expand neighbors
         successors = problem.getSuccessors(node)
+        #look at all successors
         for successor in successors:
             successor_node = successor[0]
             successor_path = successor[1]
@@ -135,10 +138,7 @@ def breadthFirstSearch(problem):
             successor_path = successor[1]
             successor_cost = successor[2]
             if successor_node not in visited:
-                # path list should show how to get to this node from the start
                 unexplored.push((successor_node, path_list + [successor_path], successor_cost + cost_from_start))
-                # else continue
-        # else continue
     util.raiseNotDefined()
 
 def uniformCostSearch(problem):
