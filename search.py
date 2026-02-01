@@ -16,6 +16,7 @@
 In search.py, you will implement generic search algorithms which are called by
 Pacman agents (in searchAgents.py).
 """
+from queue import PriorityQueue
 
 import util
 
@@ -142,8 +143,24 @@ def breadthFirstSearch(problem):
     util.raiseNotDefined()
 
 def uniformCostSearch(problem):
-    """Search the node of least total cost first."""
-    "*** YOUR CODE HERE ***"
+    start = problem.getStartState()
+
+    pq = util.PriorityQueue()
+    pq.push((start, [], 0),0)
+    best_cost = {start:0}
+    while not pq.isEmpty():
+        state, actions, cost_so_far = pq.pop()
+        if cost_so_far != best_cost[state]:
+            continue
+
+        if problem.isGoalState(state):
+            return actions
+        for succ, action, step_cost in problem.getSuccessors(state):
+            new_cost = cost_so_far + step_cost
+            if succ not in best_cost or new_cost < best_cost[succ]:
+                best_cost[succ] = new_cost
+                pq.push((succ, actions + [action], new_cost),new_cost)
+    # return []
     util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
@@ -156,6 +173,23 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
+    start = problem.getStartState()
+    pq = util.PriorityQueue()
+    pq.push((start, [], 0),heuristic(start, problem))
+
+    best_cost = {start:0}
+
+    while not pq.isEmpty():
+        state, actions, cost_so_far = pq.pop()
+        if cost_so_far != best_cost[state]:
+            continue
+        if problem.isGoalState(state):
+            return actions
+        for succ, action, step_cost in problem.getSuccessors(state):
+            new_cost = cost_so_far + step_cost
+            if succ not in best_cost or new_cost < best_cost[succ]:
+                best_cost[succ] = new_cost
+                pq.push((succ, actions + [action], new_cost),new_cost + heuristic(succ, problem))
     util.raiseNotDefined()
 
 
